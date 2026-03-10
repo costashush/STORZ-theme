@@ -1,0 +1,493 @@
+:root {
+  --storz-primary: #111827;
+  --storz-secondary: #4f46e5;
+  --storz-accent: #0ea5e9;
+  --storz-bg: #f5f7fb;
+  --storz-text: #222222;
+  --storz-muted: #6b7280;
+  --storz-card: #ffffff;
+  --storz-border: #dbe3ef;
+  --storz-gradient-start: #f5f7fb;
+  --storz-gradient-end: #e9eefb;
+  --storz-card-radius: 20px;
+  --storz-field-radius: 12px;
+  --storz-logo-max-width: 220px;
+  --storz-form-max-width: 980px;
+  --storz-content-max-width: 1440px;
+  --storz-section-gap: 24px;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--storz-bg);
+  color: var(--storz-text);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+}
+
+body::before {
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+body::after {
+  z-index: -1;
+}
+
+body.storz-bg-solid::before {
+  display: none;
+}
+
+body.storz-bg-solid::after {
+  background: transparent;
+}
+
+body.storz-bg-gradient::before {
+  display: none;
+}
+
+body.storz-bg-gradient::after {
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,.75), rgba(255,255,255,0) 35%),
+    linear-gradient(180deg, var(--storz-gradient-start), var(--storz-gradient-end));
+}
+
+body.storz-bg-image::after {
+  background: rgba(255,255,255,.16);
+}
+
+body.storz-bg-image-gradient::after {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.24), rgba(255,255,255,.44)),
+    linear-gradient(180deg, var(--storz-gradient-start), var(--storz-gradient-end));
+}
+
+.container {
+  width: 100%;
+  max-width: var(--storz-content-max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.site-main {
+  padding: var(--storz-section-gap) 0 44px;
+}
+
+.site-header-minimal {
+  padding: 18px 0 8px;
+}
+
+.site-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+
+.centered-stack,
+.footer-centered,
+.site-branding-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.site-branding-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.site-logo-wrap img {
+  max-width: var(--storz-logo-max-width);
+  height: auto;
+}
+
+body.storz-logo-shadow .site-logo-wrap img {
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,.14));
+}
+
+.site-logo-fallback {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--storz-primary);
+}
+
+.site-tagline {
+  margin: 8px 0 0;
+  max-width: 720px;
+  color: var(--storz-muted);
+}
+
+.site-search-wrap-centered {
+  margin-top: 18px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.site-search-wrap-centered .search-form,
+.site-search-wrap-inline .search-form {
+  display: flex;
+  gap: 10px;
+}
+
+.site-search-wrap-inline {
+  width: 100%;
+  max-width: 420px;
+}
+
+.hero-card,
+.content-card {
+  background: var(--storz-card);
+  border: 1px solid var(--storz-border);
+  border-radius: var(--storz-card-radius);
+  padding: 32px;
+  text-align: inherit;
+}
+
+body.storz-shell-style-glass .hero-card,
+body.storz-shell-style-glass .content-card,
+body.storz-form-style-glass .storz-form-card {
+  background: rgba(255,255,255,.44);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.48);
+}
+
+body.storz-shadow-soft .hero-card,
+body.storz-shadow-soft .content-card,
+body.storz-shadow-soft .storz-form-card {
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.07);
+}
+
+body.storz-shadow-strong .hero-card,
+body.storz-shadow-strong .content-card,
+body.storz-shadow-strong .storz-form-card {
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.14);
+}
+
+body.storz-shadow-none .hero-card,
+body.storz-shadow-none .content-card,
+body.storz-shadow-none .storz-form-card {
+  box-shadow: none;
+}
+
+.content-card article,
+.content-card .entry-content,
+.content-card .wp-block-group,
+.content-card .wp-block-shortcode {
+  text-align: left;
+}
+
+body.storz-align-left .content-card,
+body.storz-align-left .hero-card,
+body.storz-align-left .content-card article,
+body.storz-align-left .content-card .entry-content,
+body.storz-align-left .content-card .wp-block-group,
+body.storz-align-left .content-card .wp-block-shortcode {
+  text-align: left;
+}
+
+.content-card h1,
+.content-card h2,
+.content-card h3,
+.hero-card h1,
+.hero-card h2,
+.hero-card h3 {
+  margin-top: 0;
+}
+
+.site-footer {
+  padding: 10px 0 28px;
+  color: var(--storz-muted);
+}
+
+.screen-reader-text {
+  position: absolute;
+  left: -9999px;
+}
+
+.content-card {
+  transition: background .2s ease, box-shadow .2s ease;
+}
+
+body.storz-shell-style-transparent .content-card,
+body.storz-shell-style-transparent .hero-card {
+  background: transparent;
+  box-shadow: none;
+  padding-left: 0;
+  padding-right: 0;
+  border-color: transparent;
+}
+
+body.storz-shell-style-transparent .content-card article,
+body.storz-shell-style-transparent .content-card .entry-content {
+  max-width: var(--storz-form-max-width);
+  margin: 0 auto;
+}
+
+.storz-form-page-center,
+.storz-shortcode-center,
+.storz-demo-grid,
+.storz-filter-page-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.storz-demo-grid {
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.storz-demo-tile {
+  flex: 1 1 220px;
+  min-width: 220px;
+  background: rgba(255,255,255,.68);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.5);
+  border-radius: var(--storz-card-radius);
+  padding: 18px;
+}
+
+.storz-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.storz-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid var(--storz-border);
+}
+
+.storz-color-swatch-row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.storz-color-swatch {
+  width: 92px;
+  height: 92px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.5);
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
+}
+
+a {
+  color: var(--storz-primary);
+}
+
+a:hover {
+  color: var(--storz-secondary);
+}
+
+.wp-block-button__link,
+button,
+input[type="submit"] {
+  border-radius: var(--storz-field-radius);
+}
+
+body.storz-button-pill .wp-block-button__link,
+body.storz-button-pill button,
+body.storz-button-pill input[type="submit"] {
+  border-radius: 999px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .hero-card,
+  .content-card {
+    padding: 22px;
+    border-radius: calc(var(--storz-card-radius) - 4px);
+  }
+
+  .site-search-wrap-centered .search-form {
+    flex-direction: column;
+  }
+}
+
+
+.storz-demo-table-wrap {
+  overflow-x: auto;
+  margin-top: 22px;
+}
+
+.storz-demo-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255,255,255,.66);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--storz-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.storz-demo-table th,
+.storz-demo-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--storz-border);
+  text-align: left;
+}
+
+.storz-demo-table th {
+  background: rgba(255,255,255,.75);
+}
+
+@media (max-width: 900px) {
+  .site-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-search-wrap-inline {
+    max-width: 100%;
+  }
+}
+
+
+/* v2.4.2 alignment and transparent-input updates */
+body {
+  text-align: right;
+}
+
+body.storz-align-left {
+  text-align: left;
+}
+
+body.storz-align-center {
+  text-align: center;
+}
+
+body.storz-align-right {
+  text-align: right;
+}
+
+.site-header-inner,
+.site-header-row,
+.site-branding-side,
+.site-main,
+.content-card,
+.hero-card,
+.content-card article,
+.content-card .entry-content,
+.content-card .wp-block-group,
+.content-card .wp-block-shortcode,
+.storz-form-card,
+.storz-public-form,
+.storz-auth-card,
+.storz-account-panel,
+.storz-demo-grid,
+.storz-demo-tile,
+.storz-filter-page-wrap {
+  text-align: inherit;
+}
+
+body.storz-align-right .site-header-row {
+  flex-direction: row-reverse;
+}
+
+body.storz-align-right .site-branding-side {
+  align-items: flex-end;
+}
+
+body.storz-align-left .site-branding-side {
+  align-items: flex-start;
+}
+
+body.storz-align-center .site-branding-side {
+  align-items: center;
+}
+
+body.storz-align-right .site-search-wrap-inline .search-form,
+body.storz-align-right .storz-search-form,
+body.storz-align-right .storz-step-actions,
+body.storz-align-right .storz-chip-row,
+body.storz-align-right .storz-color-swatch-row {
+  justify-content: flex-end;
+}
+
+body.storz-align-left .site-search-wrap-inline .search-form,
+body.storz-align-left .storz-search-form,
+body.storz-align-left .storz-step-actions,
+body.storz-align-left .storz-chip-row,
+body.storz-align-left .storz-color-swatch-row {
+  justify-content: flex-start;
+}
+
+body.storz-align-center .site-search-wrap-inline .search-form,
+body.storz-align-center .storz-search-form,
+body.storz-align-center .storz-step-actions,
+body.storz-align-center .storz-chip-row,
+body.storz-align-center .storz-color-swatch-row {
+  justify-content: center;
+}
+
+body.storz-align-right .storz-demo-grid,
+body.storz-align-right .storz-form-page-center,
+body.storz-align-right .storz-shortcode-center,
+body.storz-align-right .storz-filter-page-wrap {
+  justify-content: flex-end;
+}
+
+body.storz-align-left .storz-demo-grid,
+body.storz-align-left .storz-form-page-center,
+body.storz-align-left .storz-shortcode-center,
+body.storz-align-left .storz-filter-page-wrap {
+  justify-content: flex-start;
+}
+
+body.storz-align-center .storz-demo-grid,
+body.storz-align-center .storz-form-page-center,
+body.storz-align-center .storz-shortcode-center,
+body.storz-align-center .storz-filter-page-wrap {
+  justify-content: center;
+}
+
+body.storz-align-right .content-card .wp-block-table table,
+body.storz-align-right .storz-filter-page-wrap table,
+body.storz-align-right table {
+  direction: rtl;
+}
+
+body.storz-align-right .content-card .wp-block-table th,
+body.storz-align-right .content-card .wp-block-table td,
+body.storz-align-right .storz-filter-page-wrap th,
+body.storz-align-right .storz-filter-page-wrap td,
+body.storz-align-right table th,
+body.storz-align-right table td {
+  text-align: right;
+}
