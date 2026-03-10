@@ -1,0 +1,181 @@
+.storz-form-card {
+  width: 100%;
+  max-width: var(--storz-form-max-width, 620px);
+  margin: 0 auto;
+  background: transparent;
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: none;
+  text-align: center;
+}
+
+body.storz-form-style-card .storz-form-card {
+  background: #fff;
+  padding: 26px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.08);
+}
+
+body.storz-form-style-transparent .storz-form-card {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.storz-public-form .storz-field-group,
+.storz-auth-card p,
+.storz-form-step {
+  margin-bottom: 18px;
+}
+
+.storz-public-form input,
+.storz-public-form textarea,
+.storz-public-form select,
+.storz-public-form button,
+.storz-auth-card input[type="text"],
+.storz-auth-card input[type="password"],
+.storz-auth-card input[type="email"],
+.storz-search-input {
+  width: 100%;
+  max-width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.storz-public-form label,
+.storz-public-form legend {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.storz-public-form button,
+.storz-auth-card input[type="submit"],
+.storz-button-link,
+.storz-search-button {
+  display: inline-block;
+  background: var(--storz-primary);
+  color: #fff;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  padding: 12px 18px;
+  border-radius: 12px;
+}
+
+.storz-choice-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.storz-choice-list label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-weight: 400;
+}
+
+.storz-choice-list input[type="radio"],
+.storz-choice-list input[type="checkbox"],
+.storz-auth-card input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.storz-auth-links,
+.storz-logout-wrap {
+  margin-top: 12px;
+}
+
+.storz-auth-links a,
+.storz-account-panel a {
+  color: var(--storz-primary);
+}
+
+.storz-search-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.storz-form-progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.storz-form-progress-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #d1d5db;
+}
+
+.storz-form-progress-dot.is-active {
+  background: var(--storz-primary);
+}
+
+.storz-form-step {
+  display: none;
+}
+
+.storz-form-step.is-active {
+  display: block;
+}
+
+.storz-step-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.storz-step-indicator {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 640px) {
+  .storz-search-form,
+  .storz-step-actions {
+    flex-direction: column;
+  }
+}
+
+
+.storz-public-form,
+.storz-auth-card,
+.storz-account-panel {
+  width: 100%;
+  max-width: var(--storz-form-max-width, 620px);
+  margin: 0 auto;
+}
+
+.storz-public-form .storz-field-group {
+  text-align: center;
+}
+
+.storz-public-form input,
+.storz-public-form textarea,
+.storz-public-form select,
+.storz-auth-card input[type="text"],
+.storz-auth-card input[type="password"],
+.storz-auth-card input[type="email"] {
+  max-width: var(--storz-form-max-width, 620px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.storz-form-card .storz-search-form {
+  max-width: var(--storz-form-max-width, 620px);
+  margin: 0 auto;
+}

@@ -1,0 +1,133 @@
+:root {
+  --storz-primary: #111827;
+  --storz-bg: #f5f7fb;
+  --storz-text: #222;
+  --storz-card: #ffffff;
+}
+
+body {
+  margin: 0;
+  background: var(--storz-bg);
+  color: var(--storz-text);
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.site-main {
+  padding: 26px 0 44px;
+}
+
+.site-header-minimal {
+  padding: 28px 0 8px;
+}
+
+.centered-stack,
+.footer-centered,
+.site-branding-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.site-logo-wrap img {
+  max-width: 220px;
+  height: auto;
+}
+
+.site-logo-fallback {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--storz-primary);
+}
+
+.site-tagline {
+  margin: 10px 0 0;
+  max-width: 560px;
+  color: #4b5563;
+}
+
+.site-search-wrap-centered {
+  margin-top: 18px;
+  width: 100%;
+}
+
+.hero-card,
+.content-card {
+  background: var(--storz-card);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.07);
+  text-align: center;
+}
+
+.content-card article,
+.content-card .entry-content,
+.content-card .wp-block-group,
+.content-card .wp-block-shortcode {
+  text-align: center;
+}
+
+.content-card h1,
+.content-card h2,
+.content-card h3,
+.hero-card h1,
+.hero-card h2,
+.hero-card h3 {
+  margin-top: 0;
+}
+
+.site-footer {
+  padding: 10px 0 28px;
+  color: #6b7280;
+}
+
+.screen-reader-text {
+  position: absolute;
+  left: -9999px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+  }
+
+  .hero-card,
+  .content-card {
+    padding: 22px;
+    border-radius: 16px;
+  }
+}
+
+
+.content-card {
+  transition: background .2s ease, box-shadow .2s ease;
+}
+
+body.storz-shell-style-transparent .content-card,
+body.storz-shell-style-transparent .hero-card {
+  background: transparent;
+  box-shadow: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+body.storz-shell-style-transparent .content-card article,
+body.storz-shell-style-transparent .content-card .entry-content {
+  max-width: var(--storz-form-max-width, 620px);
+  margin: 0 auto;
+}
+
+.storz-form-page-center,
+.storz-shortcode-center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
