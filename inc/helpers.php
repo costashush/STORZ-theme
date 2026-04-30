@@ -114,3 +114,43 @@ function storz_get_form_step_groups($fields) {
     ksort($steps);
     return $steps;
 }
+
+
+function storz_get_border_width($side) {
+    $allowed = ['top', 'right', 'bottom', 'left'];
+    if (!in_array($side, $allowed, true)) {
+        return 0;
+    }
+    return max(0, min(24, absint(storz_get_option_value('border_' . $side . '_width', 0))));
+}
+
+function storz_get_border_style() {
+    $value = storz_get_option_value('border_style', 'solid');
+    return in_array($value, ['none', 'solid', 'dashed', 'dotted'], true) ? $value : 'solid';
+}
+
+function storz_parse_external_urls($raw) {
+    if (is_array($raw)) {
+        $raw = implode("
+", $raw);
+    }
+    $lines = preg_split('/
+|
+|
+/', (string) $raw);
+    $urls = [];
+
+    foreach ($lines as $line) {
+        $url = esc_url_raw(trim($line), ['http', 'https']);
+        if (!empty($url)) {
+            $urls[] = $url;
+        }
+    }
+
+    return array_values(array_unique($urls));
+}
+
+
+function storz_get_input_text_color() {
+    return storz_get_option_value('input_text_color', '#1f2937');
+}

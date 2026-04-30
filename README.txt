@@ -1,2 +1,3 @@
-STORZ v2.4.1
-Full-width layout, left-aligned header/content, filter form demo table.
+STORZ Theme v2.6.0
+- Added input text color option
+- Added STORZ Installers page with business packages

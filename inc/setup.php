@@ -20,3 +20,17 @@ function storz_theme_setup() {
     ]);
 }
 add_action('after_setup_theme', 'storz_theme_setup');
+
+
+function storz_register_sidebars() {
+    register_sidebar([
+        'name'          => __('STORZ Sidebar', 'storz'),
+        'id'            => 'storz-sidebar',
+        'description'   => __('Main sidebar area for STORZ widgets and forms.', 'storz'),
+        'before_widget' => '<section id="%1$s" class="widget storz-widget %2$s">',
+        'after_widget'  => '</section>',
+        'before_title'  => '<h3 class="widget-title">',
+        'after_title'   => '</h3>',
+    ]);
+}
+add_action('widgets_init', 'storz_register_sidebars', 5);

@@ -9,6 +9,16 @@ function storz_enqueue_assets() {
     wp_enqueue_style('storz-form', STORZ_THEME_URI . '/assets/css/form.css', [], STORZ_THEME_VERSION);
     wp_enqueue_script('storz-frontend-form', STORZ_THEME_URI . '/assets/js/frontend-form.js', ['jquery'], STORZ_THEME_VERSION, true);
 
+    $font_urls = storz_parse_external_urls(storz_get_option_value('font_stylesheet_urls', ''));
+    foreach ($font_urls as $index => $font_url) {
+        wp_enqueue_style('storz-ext-font-' . $index, $font_url, [], null);
+    }
+
+    $script_urls = storz_parse_external_urls(storz_get_option_value('custom_script_urls', ''));
+    foreach ($script_urls as $index => $script_url) {
+        wp_enqueue_script('storz-ext-script-' . $index, $script_url, [], null, true);
+    }
+
     $primary_color = storz_get_option_value('primary_color', '#111827');
     $secondary_color = storz_get_option_value('secondary_color', '#4f46e5');
     $accent_color = storz_get_option_value('accent_color', '#0ea5e9');
@@ -16,6 +26,7 @@ function storz_enqueue_assets() {
     $text_color = storz_get_option_value('text_color', '#222222');
     $muted_text_color = storz_get_option_value('muted_text_color', '#6b7280');
     $card_color = storz_get_option_value('card_color', '#ffffff');
+    $input_text_color = storz_get_input_text_color();
     $border_color = storz_get_option_value('border_color', '#dbe3ef');
     $gradient_start = storz_get_option_value('gradient_start', '#f5f7fb');
     $gradient_end = storz_get_option_value('gradient_end', '#e9eefb');
@@ -32,6 +43,11 @@ function storz_enqueue_assets() {
     $bg_attachment = sanitize_text_field(storz_get_option_value('background_attachment', 'fixed'));
     $bg_overlay = absint(storz_get_option_value('background_overlay', 16)) / 100;
     $bg_blur = absint(storz_get_option_value('background_blur', 0));
+    $border_style = storz_get_border_style();
+    $border_top = storz_get_border_width('top');
+    $border_right = storz_get_border_width('right');
+    $border_bottom = storz_get_border_width('bottom');
+    $border_left = storz_get_border_width('left');
 
     $custom_css = ':root{' .
         '--storz-primary:' . esc_attr($primary_color) . ';' .
@@ -41,6 +57,7 @@ function storz_enqueue_assets() {
         '--storz-text:' . esc_attr($text_color) . ';' .
         '--storz-muted:' . esc_attr($muted_text_color) . ';' .
         '--storz-card:' . esc_attr($card_color) . ';' .
+        '--storz-input-text:' . esc_attr($input_text_color) . ';' .
         '--storz-border:' . esc_attr($border_color) . ';' .
         '--storz-gradient-start:' . esc_attr($gradient_start) . ';' .
         '--storz-gradient-end:' . esc_attr($gradient_end) . ';' .
@@ -50,6 +67,11 @@ function storz_enqueue_assets() {
         '--storz-card-radius:' . $card_radius . 'px;' .
         '--storz-field-radius:' . $field_radius . 'px;' .
         '--storz-section-gap:' . $section_gap . 'px;' .
+        '--storz-border-style:' . esc_attr($border_style) . ';' .
+        '--storz-border-top:' . $border_top . 'px;' .
+        '--storz-border-right:' . $border_right . 'px;' .
+        '--storz-border-bottom:' . $border_bottom . 'px;' .
+        '--storz-border-left:' . $border_left . 'px;' .
     '}';
 
     $custom_css .= 'body::before{background-image:url(' . $bg_image . ');background-size:' . esc_attr($bg_size) . ';background-position:' . esc_attr($bg_position) . ';background-repeat:' . esc_attr($bg_repeat) . ';background-attachment:' . esc_attr($bg_attachment) . ';opacity:1;filter:blur(' . $bg_blur . 'px);}';

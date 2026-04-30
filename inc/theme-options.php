@@ -27,6 +27,7 @@ function storz_sanitize_theme_options($input) {
         'text_color'            => sanitize_hex_color($input['text_color'] ?? '#222222'),
         'muted_text_color'      => sanitize_hex_color($input['muted_text_color'] ?? '#6b7280'),
         'card_color'            => sanitize_hex_color($input['card_color'] ?? '#ffffff'),
+        'input_text_color'      => sanitize_hex_color($input['input_text_color'] ?? '#1f2937'),
         'border_color'          => sanitize_hex_color($input['border_color'] ?? '#dbe3ef'),
         'gradient_start'        => sanitize_hex_color($input['gradient_start'] ?? '#f5f7fb'),
         'gradient_end'          => sanitize_hex_color($input['gradient_end'] ?? '#e9eefb'),
@@ -54,6 +55,13 @@ function storz_sanitize_theme_options($input) {
         'background_attachment' => in_array(($input['background_attachment'] ?? 'fixed'), ['scroll', 'fixed'], true) ? $input['background_attachment'] : 'fixed',
         'background_overlay'    => max(0, min(90, absint($input['background_overlay'] ?? 16))),
         'background_blur'       => max(0, min(20, absint($input['background_blur'] ?? 0))),
+        'border_style'          => in_array(($input['border_style'] ?? 'solid'), ['none', 'solid', 'dashed', 'dotted'], true) ? $input['border_style'] : 'solid',
+        'border_top_width'      => max(0, min(24, absint($input['border_top_width'] ?? 0))),
+        'border_right_width'    => max(0, min(24, absint($input['border_right_width'] ?? 0))),
+        'border_bottom_width'   => max(0, min(24, absint($input['border_bottom_width'] ?? 0))),
+        'border_left_width'     => max(0, min(24, absint($input['border_left_width'] ?? 0))),
+        'font_stylesheet_urls'  => implode("\n", storz_parse_external_urls($input['font_stylesheet_urls'] ?? '')),
+        'custom_script_urls'    => implode("\n", storz_parse_external_urls($input['custom_script_urls'] ?? '')),
     ];
 }
 
@@ -196,6 +204,52 @@ function storz_theme_options_page() {
                 </tr>
             </table>
 
+
+            <h2>Borders and Assets</h2>
+            <table class="form-table">
+                <tr>
+                    <th><label for="border_style">Border Style</label></th>
+                    <td>
+                        <select name="storz_theme_options[border_style]" id="border_style">
+                            <option value="none" <?php selected($options['border_style'] ?? 'solid', 'none'); ?>>None</option>
+                            <option value="solid" <?php selected($options['border_style'] ?? 'solid', 'solid'); ?>>Solid</option>
+                            <option value="dashed" <?php selected($options['border_style'] ?? 'solid', 'dashed'); ?>>Dashed</option>
+                            <option value="dotted" <?php selected($options['border_style'] ?? 'solid', 'dotted'); ?>>Dotted</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="border_top_width">Top Border Width</label></th>
+                    <td><input type="number" min="0" max="24" step="1" name="storz_theme_options[border_top_width]" id="border_top_width" value="<?php echo esc_attr($options['border_top_width'] ?? 0); ?>"> px</td>
+                </tr>
+                <tr>
+                    <th><label for="border_right_width">Right Border Width</label></th>
+                    <td><input type="number" min="0" max="24" step="1" name="storz_theme_options[border_right_width]" id="border_right_width" value="<?php echo esc_attr($options['border_right_width'] ?? 0); ?>"> px</td>
+                </tr>
+                <tr>
+                    <th><label for="border_bottom_width">Bottom Border Width</label></th>
+                    <td><input type="number" min="0" max="24" step="1" name="storz_theme_options[border_bottom_width]" id="border_bottom_width" value="<?php echo esc_attr($options['border_bottom_width'] ?? 0); ?>"> px</td>
+                </tr>
+                <tr>
+                    <th><label for="border_left_width">Left Border Width</label></th>
+                    <td><input type="number" min="0" max="24" step="1" name="storz_theme_options[border_left_width]" id="border_left_width" value="<?php echo esc_attr($options['border_left_width'] ?? 0); ?>"> px</td>
+                </tr>
+                <tr>
+                    <th><label for="font_stylesheet_urls">Font Stylesheet URLs</label></th>
+                    <td>
+                        <textarea name="storz_theme_options[font_stylesheet_urls]" id="font_stylesheet_urls" rows="4" class="large-text code"><?php echo esc_textarea($options['font_stylesheet_urls'] ?? ''); ?></textarea>
+                        <p class="description">One URL per line. Use it for external font stylesheet links.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="custom_script_urls">Custom Script URLs</label></th>
+                    <td>
+                        <textarea name="storz_theme_options[custom_script_urls]" id="custom_script_urls" rows="4" class="large-text code"><?php echo esc_textarea($options['custom_script_urls'] ?? ''); ?></textarea>
+                        <p class="description">One URL per line. These scripts load in the footer.</p>
+                    </td>
+                </tr>
+            </table>
+
             <h2>Colors</h2>
             <table class="form-table">
                 <tr>
@@ -233,6 +287,10 @@ function storz_theme_options_page() {
                 <tr>
                     <th><label for="card_color">Card Color</label></th>
                     <td><input type="color" name="storz_theme_options[card_color]" id="card_color" value="<?php echo esc_attr($options['card_color'] ?? '#ffffff'); ?>"></td>
+                </tr>
+                <tr>
+                    <th><label for="input_text_color">Input Text Color</label></th>
+                    <td><input type="color" name="storz_theme_options[input_text_color]" id="input_text_color" value="<?php echo esc_attr($options['input_text_color'] ?? '#1f2937'); ?>"></td>
                 </tr>
                 <tr>
                     <th><label for="border_color">Border Color</label></th>

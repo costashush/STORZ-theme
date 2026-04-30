@@ -15,6 +15,7 @@ function storz_register_admin_menu() {
     );
 
     add_submenu_page('storz', __('Design Options', 'storz'), __('Design Options', 'storz'), 'manage_options', 'storz', 'storz_theme_options_page');
+    add_submenu_page('storz', __('Installers', 'storz'), __('Installers', 'storz'), 'manage_options', 'storz-installers', 'storz_installers_page');
     add_submenu_page('storz', __('All Forms', 'storz'), __('All Forms', 'storz'), 'manage_options', 'storz-forms', 'storz_forms_page');
     add_submenu_page('storz', __('Add New Form', 'storz'), __('Add New Form', 'storz'), 'manage_options', 'storz-add-form', 'storz_add_form_page');
     add_submenu_page('storz', __('Submissions', 'storz'), __('Submissions', 'storz'), 'manage_options', 'storz-submissions', 'storz_submissions_page');

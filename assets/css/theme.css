@@ -6,6 +6,7 @@
   --storz-text: #222222;
   --storz-muted: #6b7280;
   --storz-card: #ffffff;
+  --storz-input-text: #1f2937;
   --storz-border: #dbe3ef;
   --storz-gradient-start: #f5f7fb;
   --storz-gradient-end: #e9eefb;
@@ -15,6 +16,11 @@
   --storz-form-max-width: 980px;
   --storz-content-max-width: 1440px;
   --storz-section-gap: 24px;
+  --storz-border-style: solid;
+  --storz-border-top: 0px;
+  --storz-border-right: 0px;
+  --storz-border-bottom: 0px;
+  --storz-border-left: 0px;
 }
 
 html {
@@ -161,7 +167,12 @@ body.storz-logo-shadow .site-logo-wrap img {
 .hero-card,
 .content-card {
   background: var(--storz-card);
-  border: 1px solid var(--storz-border);
+  border-style: var(--storz-border-style);
+  border-color: var(--storz-border);
+  border-top-width: var(--storz-border-top);
+  border-right-width: var(--storz-border-right);
+  border-bottom-width: var(--storz-border-bottom);
+  border-left-width: var(--storz-border-left);
   border-radius: var(--storz-card-radius);
   padding: 32px;
   text-align: inherit;
@@ -490,4 +501,21 @@ body.storz-align-right .storz-filter-page-wrap td,
 body.storz-align-right table th,
 body.storz-align-right table td {
   text-align: right;
+}
+
+
+.widget.storz-widget {
+  margin-bottom: 24px;
+}
+
+.widget.storz-widget .storz-form-card {
+  max-width: 100%;
+}
+
+.storz-widget-preview-note {
+  font-size: 12px;
+  color: var(--storz-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
 }

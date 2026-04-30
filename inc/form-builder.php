@@ -200,7 +200,6 @@ function storz_save_form_record($form_id = 0) {
         'settings' => wp_json_encode([
             'ajax' => false,
             'store_submissions' => true,
-            'custom_css' => wp_kses(wp_unslash($_POST['custom_css'] ?? ''), []),
         ]),
     ];
 
@@ -217,8 +216,6 @@ function storz_render_form_editor($mode = 'create', $form = null) {
     $form_name = $form ? $form->name : '';
     $form_slug = $form ? $form->slug : '';
     $fields_json = $form && !empty($form->fields) ? $form->fields : '[]';
-    $settings = $form && !empty($form->settings) ? json_decode($form->settings, true) : [];
-    $custom_css = is_array($settings) ? ($settings['custom_css'] ?? '') : '';
     ?>
     <form method="post">
         <?php wp_nonce_field($mode === 'edit' ? 'storz_update_form' : 'storz_save_form', 'storz_nonce'); ?>
@@ -231,22 +228,6 @@ function storz_render_form_editor($mode = 'create', $form = null) {
                 <th><label for="form_slug">Form Slug</label></th>
                 <td><input type="text" name="form_slug" id="form_slug" class="regular-text" value="<?php echo esc_attr($form_slug); ?>" required></td>
             </tr>
-                <tr>
-                    <th><label for="custom_css">Form Custom CSS</label></th>
-                    <td>
-                        <textarea
-                        name="custom_css"
-                        id="custom_css"
-                        class="large-text code"
-                        rows="10"
-                        placeholder=".storz-form-card { background: transparent; }"
-                        ><?php echo esc_textarea($custom_css); ?></textarea>
-
-                        <p class="description">
-                        This CSS belongs only to this form.
-                        </p>
-                    </td>
-                </tr>
         </table>
 
         <div class="storz-builder-wrap">
@@ -303,7 +284,7 @@ function storz_forms_page() {
             </form>
             <form method="post" style="display:inline-block; margin:0;">
                 <?php wp_nonce_field('storz_install_prebuilt_pages', 'storz_pages_nonce'); ?>
-                <button type="submit" name="storz_install_prebuilt_pages" class="button button-secondary">Install Prebuilt Pages</button>
+                <button type="submit" name="storz_install_prebuilt_pages" class="button button-secondary">Install Prebuilt Pages</button><p class="description">For industry-specific demo content use the new <strong>STORZ → Installers</strong> page.</p>
             </form>
         </div>
 

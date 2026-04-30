@@ -1,3 +1,13 @@
+.storz-public-form input,
+.storz-public-form textarea,
+.storz-public-form select,
+.storz-auth-card input[type="text"],
+.storz-auth-card input[type="password"],
+.storz-auth-card input[type="email"],
+.storz-search-input {
+  color: var(--storz-input-text);
+}
+
 .storz-form-card {
   width: 100%;
   max-width: var(--storz-form-max-width, 620px);
@@ -49,7 +59,12 @@ body.storz-form-style-transparent .storz-form-card {
   width: 100%;
   max-width: 100%;
   padding: 12px 14px;
-  border: 1px solid #d1d5db;
+  border-style: var(--storz-border-style);
+  border-color: var(--storz-border);
+  border-top-width: var(--storz-border-top);
+  border-right-width: var(--storz-border-right);
+  border-bottom-width: var(--storz-border-bottom);
+  border-left-width: var(--storz-border-left);
   border-radius: var(--storz-field-radius);
   box-sizing: border-box;
   background: transparent;

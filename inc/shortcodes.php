@@ -47,10 +47,8 @@ function storz_render_form_field($field, $index) {
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-       
     </div>
     <?php
-    
     return ob_get_clean();
 }
 
@@ -61,26 +59,18 @@ function storz_render_form_shortcode($atts) {
     if (!$form) {
         return '<p>Form not found.</p>';
     }
-    $settings = !empty($form->settings) ? json_decode($form->settings, true) : [];
-    $custom_css = is_array($settings) ? ($settings['custom_css'] ?? '') : '';
-    $form_wrapper_id = 'storz-form-' . (int) $form->id;    $fields = json_decode($form->fields, true);
+
+    $fields = json_decode($form->fields, true);
     if (!is_array($fields)) {
         $fields = [];
     }
+
     $steps = storz_get_form_step_groups($fields);
     $is_multistep = count($steps) > 1;
-    $form_wrapper_id = 'storz-form-' . (int) $form->id;
 
     ob_start();
-
-    if (!empty($custom_css)) {
-        echo '<style id="storz-form-custom-css-' . (int) $form->id . '">';
-        echo '#' . esc_attr($form_wrapper_id) . ' ' . $custom_css;
-        echo '</style>';
-    }
     ?>
-
-    <div id="<?php echo esc_attr($form_wrapper_id); ?>" class="storz-form-card">
+    <div class="storz-form-card">
         <form method="post" class="storz-public-form" data-multistep="<?php echo $is_multistep ? '1' : '0'; ?>">
             <input type="hidden" name="storz_form_id" value="<?php echo (int) $form->id; ?>">
             <?php wp_nonce_field('storz_submit_form', 'storz_submit_nonce'); ?>
