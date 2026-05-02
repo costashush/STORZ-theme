@@ -1,101 +1,80 @@
-# STORZ Theme Documentation (v2.8.1)
+# STORZ Theme
 
-## Overview
+Custom WordPress theme focused on dynamic form building, per-form styling, AJAX preview, export/import, and flexible blank pages.
 
-STORZ is a custom WordPress theme with a dynamic form builder, custom
-styling, and extensibility.
+## Version
 
-------------------------------------------------------------------------
+Current package: **2.9.0**
+
+This UI upgrade is built on top of the **v2.8.1** feature base.
+
+## Features
+
+- Dynamic form builder
+- Custom CSS per form
+- AJAX live preview
+- Form themes/presets
+- Export/import forms
+- Blank page template without header/footer
+- Modernized frontend and builder UI
+
+## Documentation
+
+- [Forms](docs/forms.md)
+- [Architecture](docs/architecture.md)
+- [Development](docs/development.md)
+- [Git Workflow](docs/git.md)
 
 ## Installation
 
-1.  Upload theme to `/wp-content/themes/`
-2.  Activate in WordPress Admin
-3.  (Optional) Import demo forms
+Upload the theme folder to:
 
-------------------------------------------------------------------------
+```text
+/wp-content/themes/
+```
 
-## Versioning
+Then activate it from WordPress Admin → Appearance → Themes.
 
-Single source of truth in `functions.php`:
+## Recommended Git Commit
 
-    define('STORZ_THEME_VERSION', '2.8.1');
+```bash
+git add .
+git commit -m "v2.9.0: upgrade UI based on v2.8.1"
+git push
+```
 
-Used for cache busting and compatibility.
 
-------------------------------------------------------------------------
+## v2.9 FormCraft UI Merge
 
-## Form Builder
+This package keeps the STORZ v2.9/v2.8.1 feature base and adds the uploaded FormCraft-inspired UI layer:
 
-### Storage
+- FormCraft-style homepage
+- Dark modern frontend form skin
+- Admin/builder visual polish
+- Drag/drop visual affordances
+- Existing STORZ form builder logic preserved
+- Existing custom CSS, AJAX preview, presets and export/import preserved
 
--   Post Type: storz_forms
--   Fields: JSON
--   Settings: JSON
+Main added files:
 
-------------------------------------------------------------------------
+```text
+assets/css/storz-formcraft-ui.css
+assets/js/storz-formcraft-ui.js
+front-page.php
+```
 
-## Custom CSS per Form
+## Admin UI
 
--   UI inside builder
--   Saved as: `_storz_form_custom_css`
--   Injected into `<head>`
+The admin/form-builder UI is intentionally light and WordPress-friendly. The dark FormCraft-inspired visual style is kept mainly for the homepage and frontend forms.
 
-------------------------------------------------------------------------
 
-## Live Preview
+## v2.9 Premium Polish
 
--   Uses AJAX
--   Updates form preview without reload
+Added:
 
-------------------------------------------------------------------------
-
-## Form Themes
-
--   Presets applied via settings
--   Example: dark, light, rounded
-
-------------------------------------------------------------------------
-
-## Export / Import
-
--   Export JSON with version
--   Import validates structure
-
-------------------------------------------------------------------------
-
-## Blank Page Template
-
-File: `page-blank.php`
-
-Use for: - Landing pages - Full-screen forms
-
-------------------------------------------------------------------------
-
-## Development
-
-### Dev Mode
-
-    define('STORZ_DEV_MODE', true);
-
-### Best Practices
-
--   Use STORZ_THEME_VERSION
--   Keep logic in /inc/
--   Sanitize input and escape output
-
-------------------------------------------------------------------------
-
-## Git Workflow
-
-    git add .
-    git commit -m "message"
-    git push
-
-------------------------------------------------------------------------
-
-## Future Improvements
-
--   MVC structure
--   Plugin extraction
--   API integration
+- Global dark frontend
+- Optional frontend dark/light toggle
+- Better typography for regular pages/posts
+- Premium card hover effects
+- Improved content readability
+- Reduced-motion support
