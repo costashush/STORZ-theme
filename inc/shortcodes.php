@@ -52,28 +52,34 @@ function storz_render_form_field($field, $index) {
     return ob_get_clean();
 }
 
-function storz_render_form_shortcode($atts) {
-    $atts = shortcode_atts(['id' => 0, 'slug' => ''], $atts, 'storz_form');
-    $form = !empty($atts['slug']) ? storz_get_form_by_slug($atts['slug']) : storz_get_form((int) $atts['id']);
-
-    if (!$form) {
-        return '<p>Form not found.</p>';
-    }
-
+/**
+ * Render a STORZ form object.
+ *
+ * This renderer is shared by the public shortcode and the admin AJAX live preview,
+ * keeping markup behavior consistent in both places.
+ */
+function storz_render_form_markup($form, $is_preview = false) {
     $fields = json_decode($form->fields, true);
     if (!is_array($fields)) {
         $fields = [];
     }
 
+    $settings = function_exists('storz_parse_form_settings') ? storz_parse_form_settings($form->settings ?? '') : ['theme' => 'default', 'custom_css' => ''];
+    $theme = sanitize_html_class($settings['theme'] ?? 'default');
     $steps = storz_get_form_step_groups($fields);
     $is_multistep = count($steps) > 1;
+    $instance_class = $is_preview ? 'storz-form-instance-preview' : 'storz-form-instance-' . (int) $form->id;
+    $form_card_classes = trim('storz-form-card ' . $instance_class . ' storz-form-theme-' . $theme);
 
     ob_start();
+    echo function_exists('storz_get_form_inline_css') ? storz_get_form_inline_css($instance_class, $settings) : '';
     ?>
-    <div class="storz-form-card">
+    <div class="<?php echo esc_attr($form_card_classes); ?>" data-form-theme="<?php echo esc_attr($theme); ?>">
         <form method="post" class="storz-public-form" data-multistep="<?php echo $is_multistep ? '1' : '0'; ?>">
             <input type="hidden" name="storz_form_id" value="<?php echo (int) $form->id; ?>">
-            <?php wp_nonce_field('storz_submit_form', 'storz_submit_nonce'); ?>
+            <?php if (!$is_preview) : ?>
+                <?php wp_nonce_field('storz_submit_form', 'storz_submit_nonce'); ?>
+            <?php endif; ?>
 
             <?php if ($is_multistep) : ?>
                 <div class="storz-form-progress">
@@ -115,6 +121,17 @@ function storz_render_form_shortcode($atts) {
     </div>
     <?php
     return ob_get_clean();
+}
+
+function storz_render_form_shortcode($atts) {
+    $atts = shortcode_atts(['id' => 0, 'slug' => ''], $atts, 'storz_form');
+    $form = !empty($atts['slug']) ? storz_get_form_by_slug($atts['slug']) : storz_get_form((int) $atts['id']);
+
+    if (!$form) {
+        return '<p>Form not found.</p>';
+    }
+
+    return storz_render_form_markup($form, false);
 }
 add_shortcode('storz_form', 'storz_render_form_shortcode');
 

@@ -181,26 +181,114 @@ function storz_handle_form_delete_action() {
 }
 add_action('admin_init', 'storz_handle_form_delete_action');
 
+
+/**
+ * Handle JSON export for one form from the All Forms table.
+ */
+function storz_handle_form_export_action() {
+    if (!is_admin() || !current_user_can('manage_options')) {
+        return;
+    }
+
+    if (!isset($_GET['page'], $_GET['action'], $_GET['form_id']) || $_GET['page'] !== 'storz-forms' || $_GET['action'] !== 'export') {
+        return;
+    }
+
+    check_admin_referer('storz_export_form_' . (int) $_GET['form_id']);
+    $payload = function_exists('storz_get_form_export_payload') ? storz_get_form_export_payload((int) $_GET['form_id']) : false;
+    if (!$payload) {
+        wp_die('Form export failed.');
+    }
+
+    nocache_headers();
+    header('Content-Type: application/json; charset=utf-8');
+    header('Content-Disposition: attachment; filename="storz-form-' . sanitize_title($payload['form']['slug']) . '.json"');
+    echo wp_json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    exit;
+}
+add_action('admin_init', 'storz_handle_form_export_action');
+
+/**
+ * Handle JSON import from the STORZ Forms page.
+ */
+function storz_handle_form_import_action() {
+    if (!is_admin() || !current_user_can('manage_options')) {
+        return;
+    }
+
+    if (!isset($_POST['storz_import_form'], $_POST['storz_import_nonce'])) {
+        return;
+    }
+
+    check_admin_referer('storz_import_form', 'storz_import_nonce');
+
+    if (empty($_FILES['storz_import_file']['tmp_name'])) {
+        wp_safe_redirect(admin_url('admin.php?page=storz-forms&message=import-empty'));
+        exit;
+    }
+
+    $json = file_get_contents($_FILES['storz_import_file']['tmp_name']);
+    $payload = json_decode($json, true);
+    $form_data = $payload['form'] ?? null;
+
+    if (!is_array($form_data) || empty($form_data['name']) || empty($form_data['fields'])) {
+        wp_safe_redirect(admin_url('admin.php?page=storz-forms&message=import-invalid'));
+        exit;
+    }
+
+    global $wpdb;
+    $table = $wpdb->prefix . 'storz_forms';
+    $base_slug = sanitize_title($form_data['slug'] ?? $form_data['name']);
+    $slug = $base_slug;
+    $i = 2;
+    while ($wpdb->get_var($wpdb->prepare("SELECT id FROM {$table} WHERE slug = %s LIMIT 1", $slug))) {
+        $slug = $base_slug . '-' . $i;
+        $i++;
+    }
+
+    $fields = is_array($form_data['fields']) ? $form_data['fields'] : [];
+    $settings = is_array($form_data['settings'] ?? null) ? $form_data['settings'] : [];
+
+    $wpdb->insert($table, [
+        'name' => sanitize_text_field($form_data['name']),
+        'slug' => $slug,
+        'fields' => wp_json_encode($fields),
+        'settings' => wp_json_encode($settings),
+    ], ['%s', '%s', '%s', '%s']);
+
+    wp_safe_redirect(admin_url('admin.php?page=storz-forms&message=imported'));
+    exit;
+}
+add_action('admin_init', 'storz_handle_form_import_action');
+
 function storz_save_form_record($form_id = 0) {
     global $wpdb;
     $table = $wpdb->prefix . 'storz_forms';
 
+    // Basic form identity. The slug is used by the [storz_form slug="..."] shortcode.
     $name = sanitize_text_field(wp_unslash($_POST['form_name'] ?? ''));
     $slug = sanitize_title(wp_unslash($_POST['form_slug'] ?? ''));
+
+    // Fields are managed in JavaScript and saved as JSON for flexible form structures.
     $fields_raw = wp_unslash($_POST['fields_json'] ?? '[]');
     $fields = json_decode($fields_raw, true);
     if (!is_array($fields)) {
         $fields = [];
     }
 
+    // Advanced options are kept in the existing settings JSON column to avoid DB migrations.
+    $settings = [
+        'ajax' => !empty($_POST['form_ajax']),
+        'store_submissions' => true,
+        'theme' => sanitize_key($_POST['form_theme'] ?? 'default'),
+        'custom_css' => function_exists('storz_sanitize_form_custom_css') ? storz_sanitize_form_custom_css($_POST['form_custom_css'] ?? '') : '',
+    ];
+
     $data = [
         'name' => $name,
         'slug' => $slug,
         'fields' => wp_json_encode($fields),
-        'settings' => wp_json_encode([
-            'ajax' => false,
-            'store_submissions' => true,
-        ]),
+        'settings' => wp_json_encode($settings),
     ];
 
     if ($form_id > 0) {
@@ -216,8 +304,10 @@ function storz_render_form_editor($mode = 'create', $form = null) {
     $form_name = $form ? $form->name : '';
     $form_slug = $form ? $form->slug : '';
     $fields_json = $form && !empty($form->fields) ? $form->fields : '[]';
+    $settings = function_exists('storz_parse_form_settings') ? storz_parse_form_settings($form->settings ?? '') : ['theme' => 'default', 'custom_css' => '', 'ajax' => false];
+    $themes = function_exists('storz_get_form_theme_presets') ? storz_get_form_theme_presets() : ['default' => 'Default'];
     ?>
-    <form method="post">
+    <form method="post" id="storz-form-editor">
         <?php wp_nonce_field($mode === 'edit' ? 'storz_update_form' : 'storz_save_form', 'storz_nonce'); ?>
         <table class="form-table">
             <tr>
@@ -228,13 +318,50 @@ function storz_render_form_editor($mode = 'create', $form = null) {
                 <th><label for="form_slug">Form Slug</label></th>
                 <td><input type="text" name="form_slug" id="form_slug" class="regular-text" value="<?php echo esc_attr($form_slug); ?>" required></td>
             </tr>
+            <tr>
+                <th><label for="form_theme">Form Theme</label></th>
+                <td>
+                    <select name="form_theme" id="form_theme">
+                        <?php foreach ($themes as $theme_key => $theme_label) : ?>
+                            <option value="<?php echo esc_attr($theme_key); ?>" <?php selected($settings['theme'], $theme_key); ?>><?php echo esc_html($theme_label); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="description">Preset styling for this form only. Global theme options still work.</p>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="form_ajax">AJAX Preview Mode</label></th>
+                <td>
+                    <label><input type="checkbox" name="form_ajax" id="form_ajax" value="1" <?php checked(!empty($settings['ajax'])); ?>> Enable AJAX-friendly form setting</label>
+                    <p class="description">Saved for future AJAX submissions. Live preview below already uses AJAX.</p>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="form_custom_css">Custom CSS</label></th>
+                <td>
+                    <textarea name="form_custom_css" id="form_custom_css" class="large-text code" rows="10" placeholder="{{form}} input { border-color: #111827; }
+{{form}} button { border-radius: 999px; }
+"><?php echo esc_textarea($settings['custom_css']); ?></textarea>
+                    <p class="description">Use <code>{{form}}</code> to target only this form instance.</p>
+                </td>
+            </tr>
         </table>
 
-        <div class="storz-builder-wrap">
-            <h2>Fields</h2>
-            <div id="storz-fields"></div>
-            <button type="button" class="button button-secondary" id="storz-add-field">Add Field</button>
-            <input type="hidden" name="fields_json" id="fields_json" value="<?php echo esc_attr($fields_json); ?>">
+        <div class="storz-builder-layout">
+            <div class="storz-builder-main">
+                <div class="storz-builder-wrap">
+                    <h2>Fields</h2>
+                    <div id="storz-fields"></div>
+                    <button type="button" class="button button-secondary" id="storz-add-field">Add Field</button>
+                    <input type="hidden" name="fields_json" id="fields_json" value="<?php echo esc_attr($fields_json); ?>">
+                </div>
+            </div>
+            <div class="storz-builder-preview-panel">
+                <h2>Live Preview</h2>
+                <p class="description">Updates through AJAX without saving the form.</p>
+                <button type="button" class="button" id="storz-refresh-preview">Refresh Preview</button>
+                <div id="storz-live-preview" class="storz-live-preview"><p>Preview will load here.</p></div>
+            </div>
         </div>
 
         <p class="submit">
@@ -269,6 +396,15 @@ function storz_forms_page() {
     if (isset($_GET['message']) && $_GET['message'] === 'updated') {
         echo '<div class="updated"><p>Form updated.</p></div>';
     }
+    if (isset($_GET['message']) && $_GET['message'] === 'imported') {
+        echo '<div class="updated"><p>Form imported.</p></div>';
+    }
+    if (isset($_GET['message']) && $_GET['message'] === 'import-empty') {
+        echo '<div class="error"><p>Please choose a JSON file to import.</p></div>';
+    }
+    if (isset($_GET['message']) && $_GET['message'] === 'import-invalid') {
+        echo '<div class="error"><p>Invalid STORZ form JSON.</p></div>';
+    }
 
     $forms = storz_get_forms();
     $templates = storz_get_prebuilt_form_templates();
@@ -288,6 +424,16 @@ function storz_forms_page() {
             </form>
         </div>
 
+        <div class="storz-import-box">
+            <h2>Import / Export Forms</h2>
+            <form method="post" enctype="multipart/form-data">
+                <?php wp_nonce_field('storz_import_form', 'storz_import_nonce'); ?>
+                <input type="file" name="storz_import_file" accept="application/json,.json" required>
+                <button type="submit" name="storz_import_form" class="button button-secondary">Import Form JSON</button>
+            </form>
+            <p class="description">Use Export in the Actions column to download a portable JSON backup of a form.</p>
+        </div>
+
         <table class="widefat striped">
             <thead>
                 <tr>
@@ -302,6 +448,7 @@ function storz_forms_page() {
             <?php if ($forms) : foreach ($forms as $form) :
                 $edit_url = admin_url('admin.php?page=storz-edit-form&form_id=' . (int) $form->id);
                 $delete_url = wp_nonce_url(admin_url('admin.php?page=storz-forms&action=delete&form_id=' . (int) $form->id), 'storz_delete_form_' . (int) $form->id);
+                $export_url = wp_nonce_url(admin_url('admin.php?page=storz-forms&action=export&form_id=' . (int) $form->id), 'storz_export_form_' . (int) $form->id);
             ?>
                 <tr>
                     <td><?php echo (int) $form->id; ?></td>
@@ -310,6 +457,7 @@ function storz_forms_page() {
                     <td>[storz_form id="<?php echo (int) $form->id; ?>"]<br>[storz_form slug="<?php echo esc_attr($form->slug); ?>"]</td>
                     <td>
                         <a class="button button-small" href="<?php echo esc_url($edit_url); ?>">Edit</a>
+                        <a class="button button-small" href="<?php echo esc_url($export_url); ?>">Export</a>
                         <a class="button button-small button-link-delete" href="<?php echo esc_url($delete_url); ?>" onclick="return confirm('Delete this form and its submissions?');">Delete</a>
                     </td>
                 </tr>

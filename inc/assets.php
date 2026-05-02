@@ -87,6 +87,14 @@ function storz_admin_assets($hook) {
     }
 
     wp_enqueue_style('storz-admin', STORZ_THEME_URI . '/assets/css/admin.css', [], STORZ_THEME_VERSION);
+    wp_enqueue_style('storz-form', STORZ_THEME_URI . '/assets/css/form.css', [], STORZ_THEME_VERSION);
+    wp_enqueue_script('storz-frontend-form', STORZ_THEME_URI . '/assets/js/frontend-form.js', ['jquery'], STORZ_THEME_VERSION, true);
     wp_enqueue_script('storz-admin-builder', STORZ_THEME_URI . '/assets/js/admin-form-builder.js', ['jquery'], STORZ_THEME_VERSION, true);
+
+    // Data used by the admin form builder for AJAX live preview.
+    wp_localize_script('storz-admin-builder', 'STORZ_FORM_BUILDER', [
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'previewNonce' => wp_create_nonce('storz_form_preview'),
+    ]);
 }
 add_action('admin_enqueue_scripts', 'storz_admin_assets');

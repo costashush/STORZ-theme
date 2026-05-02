@@ -272,3 +272,55 @@ body.storz-align-right .storz-public-form legend,
 body.storz-align-right .storz-auth-card label {
   text-align: right;
 }
+
+/* STORZ v2.8 per-form preset themes. These classes are added per rendered form. */
+.storz-form-theme-clean {
+  background: transparent;
+  box-shadow: none;
+}
+
+.storz-form-theme-clean .storz-public-form input,
+.storz-form-theme-clean .storz-public-form textarea,
+.storz-form-theme-clean .storz-public-form select {
+  border-bottom-width: 1px;
+  border-radius: 0;
+}
+
+.storz-form-theme-card {
+  background: var(--storz-card, #fff);
+  padding: 26px;
+  border-radius: var(--storz-card-radius, 20px);
+  box-shadow: 0 14px 34px rgba(0,0,0,.08);
+}
+
+.storz-form-theme-glass {
+  background: rgba(255,255,255,.44);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.48);
+  padding: 26px;
+  border-radius: var(--storz-card-radius, 20px);
+}
+
+.storz-form-theme-outline {
+  border: 1px solid var(--storz-border, #dbe3ef);
+  padding: 26px;
+  border-radius: var(--storz-card-radius, 20px);
+}
+
+.storz-form-theme-dark {
+  background: #111827;
+  color: #f9fafb;
+  padding: 26px;
+  border-radius: var(--storz-card-radius, 20px);
+}
+
+.storz-form-theme-dark .storz-public-form input,
+.storz-form-theme-dark .storz-public-form textarea,
+.storz-form-theme-dark .storz-public-form select {
+  color: #f9fafb;
+  border-color: rgba(255,255,255,.25);
+}
+
+.storz-form-theme-dark .storz-step-indicator {
+  color: rgba(255,255,255,.75);
+}

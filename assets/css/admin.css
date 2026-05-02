@@ -22,3 +22,41 @@
   width: 100%;
   margin-bottom: 10px;
 }
+
+/* STORZ v2.8 form-builder layout: separates editing from preview for easier development. */
+.storz-builder-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  gap: 24px;
+  align-items: start;
+}
+
+.storz-builder-preview-panel,
+.storz-import-box {
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 20px 0;
+  box-shadow: 0 6px 18px rgba(0,0,0,.04);
+}
+
+.storz-live-preview {
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px dashed #c3c4c7;
+  border-radius: 10px;
+  background: #f6f7f7;
+  max-height: 72vh;
+  overflow: auto;
+}
+
+.storz-live-preview.is-loading {
+  opacity: .7;
+}
+
+@media (max-width: 1100px) {
+  .storz-builder-layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,7 +1,9 @@
 jQuery(function ($) {
   const fieldsWrap = $('#storz-fields');
   const hiddenInput = $('#fields_json');
+  const previewWrap = $('#storz-live-preview');
   let fields = [];
+  let previewTimer = null;
 
   function esc(value) {
     return String(value || '')
@@ -90,6 +92,7 @@ jQuery(function ($) {
     });
 
     hiddenInput.val(JSON.stringify(fields));
+    queuePreview();
   }
 
   $('#storz-add-field').on('click', function () {
@@ -109,6 +112,7 @@ jQuery(function ($) {
     fields[index].options = card.find('.storz-options').val().split('\n').map(v => v.trim()).filter(Boolean);
 
     hiddenInput.val(JSON.stringify(fields));
+    queuePreview();
   });
 
   fieldsWrap.on('click', '.storz-remove-field', function () {
@@ -117,6 +121,53 @@ jQuery(function ($) {
     render();
   });
 
+  /**
+   * Request an AJAX preview from WordPress.
+   * The preview uses the same PHP renderer as the public shortcode.
+   */
+  function refreshPreview() {
+    if (!previewWrap.length || typeof STORZ_FORM_BUILDER === 'undefined') {
+      return;
+    }
+
+    previewWrap.addClass('is-loading').html('<p>Loading preview...</p>');
+
+    $.post(STORZ_FORM_BUILDER.ajaxUrl, {
+      action: 'storz_form_preview',
+      nonce: STORZ_FORM_BUILDER.previewNonce,
+      form_name: $('#form_name').val(),
+      fields_json: hiddenInput.val(),
+      theme: $('#form_theme').val(),
+      ajax: $('#form_ajax').is(':checked') ? 1 : 0,
+      custom_css: $('#form_custom_css').val()
+    }).done(function (response) {
+      if (response && response.success && response.data && response.data.html) {
+        previewWrap.html(response.data.html);
+      } else {
+        previewWrap.html('<p>Preview failed.</p>');
+      }
+    }).fail(function () {
+      previewWrap.html('<p>Preview request failed.</p>');
+    }).always(function () {
+      previewWrap.removeClass('is-loading');
+    });
+  }
+
+  /**
+   * Debounce preview updates so typing CSS does not spam admin-ajax.php.
+   */
+  function queuePreview() {
+    if (!previewWrap.length) {
+      return;
+    }
+    window.clearTimeout(previewTimer);
+    previewTimer = window.setTimeout(refreshPreview, 350);
+  }
+
+  $('#storz-refresh-preview').on('click', refreshPreview);
+  $('#form_name, #form_theme, #form_ajax, #form_custom_css').on('input change', queuePreview);
+
   loadInitialFields();
   render();
+  refreshPreview();
 });
