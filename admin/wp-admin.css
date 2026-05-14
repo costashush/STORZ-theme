@@ -1,0 +1,53 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+body,#wpcontent,#wpfooter,#wpbody,#wpbody-content{background:#f0f2f5!important;font-family:'DM Sans',sans-serif!important}
+.wrap{background:transparent!important}
+h1,h2,h3,.wp-heading-inline{font-family:'Syne',sans-serif!important;color:#1e293b!important}
+
+#adminmenuback,#adminmenuwrap,#adminmenu{background:#1e293b!important}
+#adminmenu a{color:#94a3b8!important;font-size:.82rem!important;font-weight:500!important}
+#adminmenu li.current a.menu-top,
+#adminmenu li.wp-has-current-submenu a.wp-has-current-submenu{color:#fff!important;background:rgba(124,58,237,.25)!important;border-left:3px solid #7c3aed!important}
+#adminmenu li:hover>a{color:#f1f5f9!important;background:rgba(255,255,255,.07)!important}
+#adminmenu .wp-submenu{background:#0f172a!important;border:none!important}
+#adminmenu .wp-submenu a{color:#94a3b8!important;font-size:.8rem!important}
+#adminmenu .wp-submenu a:hover,#adminmenu .wp-submenu .current a{color:#a78bfa!important}
+#adminmenu .wp-menu-arrow div{background:#1e293b!important}
+#collapse-button{color:#64748b!important}
+
+#wpadminbar{background:#1e293b!important;font-family:'DM Sans',sans-serif!important}
+#wpadminbar *{color:#94a3b8!important}
+#wpadminbar a:hover,#wpadminbar .menupop:hover>.ab-item{color:#fff!important;background:rgba(124,58,237,.2)!important}
+#wpadminbar .ab-sub-wrapper{background:#1e293b!important;border:1px solid rgba(255,255,255,.08)!important}
+
+.postbox,.stuffbox{background:#fff!important;border:1px solid #e2e8f0!important;border-radius:10px!important;box-shadow:0 1px 3px rgba(0,0,0,.06)!important}
+.postbox h2,.postbox h3,.stuffbox h3{background:#f8fafc!important;border-bottom:1px solid #e2e8f0!important;color:#1e293b!important;border-radius:9px 9px 0 0!important;font-family:'Syne',sans-serif!important}
+.inside{color:#334155!important}
+
+.wp-list-table{background:#fff!important;border:1px solid #e2e8f0!important;border-radius:10px!important;overflow:hidden!important;box-shadow:0 1px 3px rgba(0,0,0,.05)!important}
+.wp-list-table thead tr,.wp-list-table tfoot tr{background:#f8fafc!important}
+.wp-list-table th{color:#64748b!important;font-size:.7rem!important;text-transform:uppercase!important;letter-spacing:.07em!important;border-bottom:1px solid #e2e8f0!important}
+.wp-list-table td{color:#334155!important;border-bottom:1px solid #f1f5f9!important}
+.wp-list-table tbody tr:hover{background:#f8fafc!important}
+.striped>tbody>:nth-child(odd){background:#fff!important}
+.striped>tbody>:nth-child(even){background:#fafbfc!important}
+
+input[type=text],input[type=email],input[type=url],input[type=password],input[type=number],input[type=search],textarea,select{background:#fff!important;border:1px solid #d1d5db!important;color:#1e293b!important;border-radius:7px!important;box-shadow:0 1px 2px rgba(0,0,0,.05)!important;font-family:'DM Sans',sans-serif!important}
+input:focus,textarea:focus,select:focus{border-color:#7c3aed!important;box-shadow:0 0 0 3px rgba(124,58,237,.15)!important;outline:none!important}
+
+.button,.button-secondary{background:#fff!important;border:1px solid #d1d5db!important;color:#374151!important;border-radius:7px!important;font-weight:500!important;font-family:'DM Sans',sans-serif!important}
+.button:hover{border-color:#7c3aed!important;color:#1e293b!important}
+.button-primary{background:linear-gradient(135deg,#f97316 0%,#c026d3 50%,#7c3aed 100%)!important;border:none!important;color:#fff!important;border-radius:7px!important;font-weight:600!important;font-family:'DM Sans',sans-serif!important}
+.button-primary:hover{filter:brightness(1.08)!important;color:#fff!important}
+
+.notice,.updated,.error,.settings-error{background:#fff!important;border-radius:0 7px 7px 0!important;color:#374151!important;box-shadow:0 1px 3px rgba(0,0,0,.06)!important}
+.notice-success{border-left-color:#10b981!important}
+.notice-error{border-left-color:#ef4444!important}
+.notice-warning{border-left-color:#f59e0b!important}
+.notice-info{border-left-color:#7c3aed!important}
+
+#wpfooter{background:#f0f2f5!important;border-top:1px solid #e2e8f0!important;color:#94a3b8!important}
+#wpfooter a{color:#7c3aed!important}
+
+#adminmenu #toplevel_page_storz .wp-menu-image img{width:20px!important;height:20px!important;padding:7px 0!important}

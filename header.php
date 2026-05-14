@@ -1,59 +1,32 @@
-<!doctype html>
-<html <?php language_attributes(); ?>>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?> data-theme="<?php echo esc_attr(get_option('storz_color_theme','dark')); ?>">
 <head>
-    <meta charset="<?php bloginfo('charset'); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?php wp_head(); ?>
+<meta charset="<?php bloginfo('charset'); ?>">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
-
-<?php if (storz_is_header_enabled()) : ?>
-<header class="site-header storz-site-header">
-    <div class="container storz-header-inner">
-        <a class="storz-brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php echo esc_attr(get_bloginfo('name')); ?>">
-            <span class="storz-brand-logo"><?php echo storz_get_logo_markup(); ?><?php ?></span>
-            <?php if (storz_is_header_text_enabled()) : ?>
-                <span class="storz-brand-text">
-                    <strong><?php echo esc_html(get_bloginfo('name')); ?></strong>
-                    <small><?php echo esc_html(storz_get_header_text()); ?></small>
-                </span>
-            <?php endif; ?>
-        </a>
-
-        <div class="storz-header-actions">
-            <?php if (has_nav_menu('primary')) : ?>
-                <nav class="storz-main-nav" aria-label="<?php esc_attr_e('Primary menu', 'storz'); ?>">
-                    <?php
-                    wp_nav_menu([
-                        'theme_location' => 'primary',
-                        'container'      => false,
-                        'menu_class'     => 'storz-nav-menu',
-                        'fallback_cb'    => false,
-                        'depth'          => 2,
-                    ]);
-                    ?>
-                </nav>
-            <?php endif; ?>
-
-            
-            <button class="storz-theme-toggle" type="button" aria-label="<?php esc_attr_e('Toggle dark and light mode', 'storz'); ?>">
-                <span class="storz-theme-toggle-icon" aria-hidden="true">☾</span>
-            </button>
-
-            <?php if (storz_is_search_enabled()) : ?>
-                <button class="storz-search-toggle" type="button" aria-expanded="false" aria-controls="storz-header-search">
-                    <span aria-hidden="true">⌕</span>
-                    <span class="screen-reader-text"><?php esc_html_e('Search', 'storz'); ?></span>
-                </button>
-
-                <div id="storz-header-search" class="storz-header-search">
-                    <?php get_search_form(); ?>
-                </div>
-            <?php endif; ?>
-        </div>
+<a class="skip-link" href="#main-content"><?php esc_html_e('Skip to main content','storz'); ?></a>
+<header class="site-header" role="banner">
+  <div class="container"><div class="header-inner">
+    <a href="<?php echo esc_url(home_url('/')); ?>" class="site-logo" rel="home">
+      <span class="sz-logo-icon" aria-hidden="true">&#x1F98B;</span>
+      <span class="sz-logo-text-wrap" style="display:flex;flex-direction:column">
+        <span class="sz-logo-word"><?php echo esc_html(get_option('storz_brand_name','STORZ')); ?></span>
+        <?php if(get_option('storz_brand_tagline','')): ?><span class="sz-logo-sub"><?php echo esc_html(get_option('storz_brand_tagline','')); ?></span><?php endif; ?>
+      </span>
+    </a>
+    <nav class="main-nav" id="primary-nav" role="navigation" aria-label="Primary navigation">
+      <?php wp_nav_menu(['theme_location'=>'primary','container'=>false,'items_wrap'=>'%3$s','fallback_cb'=>false]); ?>
+    </nav>
+    <div class="header-ctrl">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch colour theme" aria-pressed="false" type="button">
+        <span class="icon-moon" aria-hidden="true">&#127769;</span>
+        <span class="icon-sun" aria-hidden="true">&#9728;&#65039;</span>
+      </button>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="Open menu">&#9776;</button>
     </div>
+  </div></div>
 </header>
-<?php endif; ?>
-
-<main class="site-main storz-site-main">
+<main id="main-content" tabindex="-1">
